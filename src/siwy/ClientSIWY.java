@@ -19,10 +19,11 @@ public class ClientSIWY implements Runnable {
 			throws UnknownHostException, IOException {
 		this.addressServ = address;
 		this.socket = new Socket(InetAddress.getByName(addressServ), num);
+		System.out.println("Client: "+socket);
 		this.camera = camera;
 		this.bytemat = new MatOfByte();
 	}
-
+	//InetAddress.getByName(addressServ) InetAddress.getLocalHost()
 	public void wait(int a) {
 		try {
 			Thread.sleep(a);
@@ -40,6 +41,7 @@ public class ClientSIWY implements Runnable {
 				DataOutputStream dout = new DataOutputStream(
 						socket.getOutputStream());
 				dout.writeInt(bytes.length);
+				System.out.println("Send");
 				dout.write(bytes);
 				dout.flush();
 			} catch (IOException e) {
@@ -47,7 +49,7 @@ public class ClientSIWY implements Runnable {
 			}
 		}
 	}
-
+	
 	public void run() {
 		while (camera.isOpen()) {
 			// Pour avoir une image fluide

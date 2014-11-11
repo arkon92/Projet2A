@@ -26,9 +26,11 @@ public class Printer implements Runnable {
 	public void run() {
 		int length;
 		JPanel jpanel;
-		while ( !socket.isClosed()) {
+		System.out.println(socket.isClosed());
+		while (!socket.isClosed()) {
 			try {
 				length = din.readInt();
+				System.out.println("Read");
 				if (length == 0) {
 					continue;
 				}

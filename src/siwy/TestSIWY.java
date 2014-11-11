@@ -24,7 +24,8 @@ public class TestSIWY {
 		Thread s = new Thread(serv);
 		s.start();
 
-		String addServ = "127.0.0.1";
+		String addServ = "81.48.122.227";
+		//String addServ = "192.168.1.22";
 		ClientSIWY client = new ClientSIWY(6500, addServ, cam);
 		Thread c = new Thread(client);
 		c.start();

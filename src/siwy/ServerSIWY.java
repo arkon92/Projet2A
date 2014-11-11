@@ -1,6 +1,7 @@
 package siwy;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -9,7 +10,7 @@ import javax.swing.JFrame;
 import org.opencv.core.Core;
 
 public class ServerSIWY implements Runnable {
-	
+
 	private ServerSocket socketserver;
 	private Socket[] socket;
 	private int nbrClient;
@@ -19,7 +20,7 @@ public class ServerSIWY implements Runnable {
 	private Thread[] thread;
 
 	ServerSIWY(int num, int max) throws IOException {
-		this.socketserver = new ServerSocket(num);
+		this.socketserver = new ServerSocket(num,5,InetAddress.getByName("192.168.1.22"));
 		this.nbrClient = 0;
 		this.socket = new Socket[5];
 		this.clientMax = max;
@@ -40,10 +41,12 @@ public class ServerSIWY implements Runnable {
 
 	public void run() {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-		// On attend de recevoir les deux client;
+		// On attend de recevoir les clients
 		while (this.nbrClient < this.clientMax) {
 			try {
 				this.socket[this.nbrClient] = socketserver.accept();
+				System.out.println(socket[this.nbrClient]);
+				System.out.println(this.socketserver);
 				printer[this.nbrClient] = new Printer(socket[this.nbrClient],
 						fenetre[this.nbrClient]);
 				thread[this.nbrClient] = new Thread(printer[this.nbrClient]);
@@ -57,6 +60,7 @@ public class ServerSIWY implements Runnable {
 			thread[i].start();
 		}
 		boolean testOpen = true;
+		System.out.println("Client connecté");
 		while (testOpen) {
 			for (int i = 0; i < this.nbrClient; i++) {
 				testOpen = testOpen & fenetre[i].isShowing();
