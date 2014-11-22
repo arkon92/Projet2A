@@ -14,6 +14,7 @@ public class ClientSIWY implements Runnable {
 	private String addressServ;
 	private Camera camera;
 	private MatOfByte bytemat;
+	private boolean isRunning;
 
 	ClientSIWY(int num, String address, Camera camera)
 			throws UnknownHostException, IOException {
@@ -22,6 +23,7 @@ public class ClientSIWY implements Runnable {
 		System.out.println("Client: "+socket);
 		this.camera = camera;
 		this.bytemat = new MatOfByte();
+		this.isRunning = true;
 	}
 	//InetAddress.getByName(addressServ) InetAddress.getLocalHost()
 	public void wait(int a) {
@@ -30,6 +32,10 @@ public class ClientSIWY implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void close() {
+		this.isRunning = false;
 	}
 
 	public void sendImage() {
@@ -41,7 +47,6 @@ public class ClientSIWY implements Runnable {
 				DataOutputStream dout = new DataOutputStream(
 						socket.getOutputStream());
 				dout.writeInt(bytes.length);
-				System.out.println("Send");
 				dout.write(bytes);
 				dout.flush();
 			} catch (IOException e) {
@@ -51,7 +56,7 @@ public class ClientSIWY implements Runnable {
 	}
 	
 	public void run() {
-		while (camera.isOpen()) {
+		while ( this.isRunning ) {
 			// Pour avoir une image fluide
 			this.sendImage();
 		}

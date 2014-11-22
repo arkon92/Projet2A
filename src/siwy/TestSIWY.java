@@ -41,12 +41,16 @@ public class TestSIWY {
 		
 		String addServ = "127.0.0.1";
 		ServerControl serv = new ServerControl(6501);
+		RaspberryController rc = new RaspberryController( addServ, 6501);
 		Controller cont = new Controller( addServ, 6501);
-		Thread t1, t2;
+		Thread t1, t2, t3;
 		t1 = new Thread( serv);
 		t1.start();
-		t2 = new Thread( cont);
+		t2 = new Thread( rc);
 		t2.start();
+		t3 = new Thread( cont);
+		t3.start();
+		
 		
 	}
 

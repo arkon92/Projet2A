@@ -25,68 +25,67 @@ public class Controller implements Runnable {
 		this.connected = true;
 	}
 
+	public void action(int code) {
+		switch (code) {
+		case 1:
+			System.out.println("Cas 1");
+			try {
+				dout.writeInt(1);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
+		case 2:
+			System.out.println("Cas 2");
+			try {
+				dout.writeInt(2);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
+		case 3:
+			System.out.println("Cas 3");
+			try {
+				dout.writeInt(3);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
+		case 4:
+			System.out.println("Deconection du controller");
+			try {
+				dout.writeInt(4);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			this.connected = false;
+			break;
+		case 5:
+			System.out
+					.println("Attention ceci entrainera une coupure totale du système");
+			try {
+				dout.writeInt(5);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			this.connected = false;
+			break;
+		default:
+			System.out.println("Default");
+			try {
+				dout.writeInt(0);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
+		}
+	}
+
 	public void run() {
 		int code;
-		String test;
 		while (this.connected) {
 			code = this.scanner.nextInt();
-			switch (code) {
-			case 1:
-				System.out.println("Cas 1");
-				try {
-					dout.writeInt(1);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				break;
-			case 2:
-				System.out.println("Cas 2");
-				try {
-					dout.writeInt(2);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				break;
-			case 3:
-				System.out.println("Cas 3");
-				try {
-					dout.writeInt(3);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				break;
-			case 4:
-				System.out.println("Cas 4");
-				try {
-					dout.writeInt(4);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				this.connected = false;
-				break;
-			case 5:
-				System.out
-						.println("Attention ceci entrainera une coupure totale du système");
-				test = scanner.nextLine();
-				//System.out.println("Etes vous sur o/n?");
-				//if (test == "o") {
-					try {
-						dout.writeInt(5);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				//}
-				this.connected = false;
-				break;
-			default:
-				System.out.println("Default");
-				try {
-					dout.writeInt(0);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				break;
-			}
+			this.action(code);
 		}
 		try {
 			this.socket.close();

@@ -16,21 +16,26 @@ public class Printer implements Runnable {
 	private Socket socket;
 	private DataInputStream din;
 	private JFrame fenetre;
+	private boolean isRunning;
 
 	Printer(Socket soc, JFrame jframe) throws IOException {
 		this.socket = soc;
 		this.din = new DataInputStream(this.socket.getInputStream());
 		this.fenetre = jframe;
+		this.isRunning = true;
+	}
+	
+	public void close() {
+		this.isRunning = false;
 	}
 
 	public void run() {
 		int length;
 		JPanel jpanel;
 		System.out.println(socket.isClosed());
-		while (!socket.isClosed()) {
+		while ( isRunning ) {
 			try {
 				length = din.readInt();
-				System.out.println("Read");
 				if (length == 0) {
 					continue;
 				}

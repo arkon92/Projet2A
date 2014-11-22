@@ -3,44 +3,81 @@ package siwy;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Scanner;
 
 public class ServerControl implements Runnable {
 
 	private ServerSocket servSocket;
-	private Socket socket;
-	private DataInputStream din;
-	private DataOutputStream dout;
+	private Socket[] socket;
+	private DataInputStream[] din;
+	private DataOutputStream[] dout;
 	private boolean connected;
 	private ServerSIWY server;
 
-	ServerControl( int num ,ServerSIWY serv) throws UnknownHostException, IOException {
+	ServerControl(int num) throws UnknownHostException, IOException {
 		this.servSocket = new ServerSocket(num);
 		this.connected = true;
-		this.server = serv;
+		this.socket = new Socket[2];
+		this.din = new DataInputStream[2];
+		this.dout = new DataOutputStream[2];
+
 	}
 
 	void closeConnecion() {
 		this.connected = false;
 	}
-	
+
+	public void action(int code) throws IOException {
+		switch (code) {
+		case 1:
+			this.server = new ServerSIWY(6500, 1);
+			Thread t = new Thread(this.server);
+			t.start();
+			this.dout[0].writeInt(1);
+			this.dout[0].flush();
+			break;
+		case 2:
+			if (this.server.getState() == true) {
+				this.dout[0].writeInt(2);
+				this.dout[0].flush();
+				this.server.closeServer();
+				System.out.println("Server de traitement coupé");
+			}
+			break;
+		default:
+			System.out.println("COde incorect");
+			break;
+		}
+
+	}
+
 	public void run() {
 		int code = 0;
-		while ( connected ) {
+		try { // Conection avec le controller Rasp
+			this.socket[0] = servSocket.accept();
+			this.din[0] = new DataInputStream(this.socket[0].getInputStream());
+			this.dout[0] = new DataOutputStream(
+					this.socket[0].getOutputStream());
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		System.out.println("R conecté");
+		while (connected) { // Conection avec le controlleur Apk
 			try {
-				this.socket = servSocket.accept();
-				this.din = new DataInputStream( this.socket.getInputStream());
-				this.dout = new DataOutputStream( this.socket.getOutputStream());
-				while( code != 4 && code != 5) {
-					code = din.readInt();
-					System.out.println("Recu: " + code);
+				this.socket[1] = servSocket.accept();
+				System.out.println("COntroller connecté");
+				this.din[1] = new DataInputStream(
+						this.socket[1].getInputStream());
+				this.dout[1] = new DataOutputStream(
+						this.socket[1].getOutputStream());
+				while (code != 4 && code != 5) {
+					code = din[1].readInt();
+					this.action(code);
 				}
-				this.socket.close();
-				if( code == 5 ) {
+				this.socket[1].close();
+				if (code == 5) {
 					this.closeConnecion();
 				}
 			} catch (IOException e) {
@@ -48,6 +85,7 @@ public class ServerControl implements Runnable {
 			}
 		}
 		try {
+			this.socket[0].close();
 			this.servSocket.close();
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -8,12 +8,9 @@ public class Camera implements Runnable {
 	private boolean isOpen;
 	private Mat webcamImage;
 
-	public Camera() {
+	public Camera(int a) {
 		this.isOpen = true;
 		this.webcamImage = new Mat();
-	}
-
-	public void initCamera(int a) {
 		this.webCam = new VideoCapture(a);
 		this.wait(1000);
 	}
