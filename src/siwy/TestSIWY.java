@@ -10,15 +10,15 @@ public class TestSIWY {
 			InterruptedException {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-		Camera cam = new Camera();
+		/*Camera cam = new Camera();
 		cam.initCamera(0);
 		Thread t = new Thread(cam);
 		t.start();
 
-		/*
-		 * Camera cam2 = new Camera(); cam2.initCamera(1); Thread t2 = new
-		 * Thread(cam2); t2.start();
-		 */
+		
+		  Camera cam2 = new Camera(); cam2.initCamera(1); Thread t2 = new
+		  Thread(cam2); t2.start();
+		 
 
 		ServerSIWY serv = new ServerSIWY(6500, 1);
 		Thread s = new Thread(serv);
@@ -31,12 +31,23 @@ public class TestSIWY {
 		Thread c = new Thread(client);
 		c.start();
 
-		/*
-		 * ClientSIWY client2 = new ClientSIWY(6500, addServ, cam2); Thread c2 =
-		 * new Thread(client2); c2.start();
-		 */
+		
+		  ClientSIWY client2 = new ClientSIWY(6500, addServ, cam2); Thread c2 =
+		  new Thread(client2); c2.start();
+		 
 
-		// cam.stopThread();
+		cam.stopThread();
+		*/
+		
+		String addServ = "127.0.0.1";
+		ServerControl serv = new ServerControl(6501);
+		Controller cont = new Controller( addServ, 6501);
+		Thread t1, t2;
+		t1 = new Thread( serv);
+		t1.start();
+		t2 = new Thread( cont);
+		t2.start();
+		
 	}
 
 }
