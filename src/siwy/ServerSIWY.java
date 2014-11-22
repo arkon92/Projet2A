@@ -20,7 +20,7 @@ public class ServerSIWY implements Runnable {
 	private Thread[] thread;
 
 	ServerSIWY(int num, int max) throws IOException {
-		this.socketserver = new ServerSocket(num,5,InetAddress.getByName("192.168.1.22"));
+		this.socketserver = new ServerSocket(num,5);
 		this.nbrClient = 0;
 		this.socket = new Socket[5];
 		this.clientMax = max;
