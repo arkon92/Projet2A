@@ -25,11 +25,15 @@ public class ServerControl implements Runnable {
 
 	}
 
-	void closeConnecion() {
+	public void closeConnecion() {
 		this.connected = false;
 	}
 
-	public void action(int code) throws IOException {
+	public void wait( int a) throws InterruptedException {
+		Thread.sleep(a);
+	}
+	
+	public void action(int code) throws IOException, InterruptedException {
 		switch (code) {
 		case 1:
 			this.server = new ServerSIWY(6500, 1);
@@ -40,9 +44,9 @@ public class ServerControl implements Runnable {
 			break;
 		case 2:
 			if (this.server.getState() == true) {
+				this.server.closeServer();
 				this.dout[0].writeInt(2);
 				this.dout[0].flush();
-				this.server.closeServer();
 				System.out.println("Server de traitement coupé");
 			}
 			break;
@@ -78,9 +82,11 @@ public class ServerControl implements Runnable {
 				}
 				this.socket[1].close();
 				if (code == 5) {
+					this.dout[0].writeInt(5);
+					this.dout[0].flush();
 					this.closeConnecion();
 				}
-			} catch (IOException e) {
+			} catch (IOException | InterruptedException e) {
 				e.printStackTrace();
 			}
 		}

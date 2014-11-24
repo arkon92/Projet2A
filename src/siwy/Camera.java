@@ -5,59 +5,23 @@ import org.opencv.highgui.VideoCapture;
 
 public class Camera implements Runnable {
 	private VideoCapture webCam;
-	private boolean isOpen;
-	private Mat webcamImage;
+	private CacheMatImage cache;
+	private boolean ouvert;
 
-	public Camera(int a) {
-		this.isOpen = true;
-		this.webcamImage = new Mat();
+	public Camera(int a, CacheMatImage c) {
 		this.webCam = new VideoCapture(a);
-		this.wait(1000);
-	}
-
-	public boolean isOpen() {
-		return this.isOpen;
-	}
-
-	public void stopThread() {
-		this.isOpen = false;
-	}
-
-	public void closeCamera() {
-		this.webCam.release();
-	}
-
-	public void wait(int time) {
-		try {
-			Thread.sleep(time);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public Mat getMatImage() {
-		return this.webcamImage;
-	}
-
-	public boolean getStatusCam() {
-		return this.isOpen;
-	}
-
-	public void setMatImage() {
-		webCam.read(webcamImage);
+		this.cache = c;
+		this.ouvert = true;
+		new Thread(this).start();
 	}
 
 	public void run() {
-		this.wait(1000);
-		while (isOpen) {
-			if (webCam.isOpened()) {
-				this.setMatImage();
+		while (this.ouvert) {
+			Mat m = new Mat();
+			if (this.webCam.isOpened()) {
+				this.webCam.read(m);
+				this.cache.setMat(m);
 			}
 		}
-		this.wait(1000);
-		System.out.println("La caméra va fermer");
-		this.wait(2000);
-		System.out.println("Caméra fermée");
-		this.closeCamera();
 	}
 }

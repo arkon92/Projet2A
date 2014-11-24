@@ -37,7 +37,6 @@ public class TestSIWY {
 		 
 
 		cam.stopThread();
-		*/
 		
 		String addServ = "127.0.0.1";
 		ServerControl serv = new ServerControl(6501);
@@ -51,7 +50,10 @@ public class TestSIWY {
 		t3 = new Thread( cont);
 		t3.start();
 		
-		
+		*/
+		CacheMatImage m = new CacheMatImage();
+		Camera c = new Camera(0,m);
+		TMathBytes t = new TMathBytes(m);
 	}
 
 }

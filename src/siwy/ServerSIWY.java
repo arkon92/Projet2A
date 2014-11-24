@@ -20,7 +20,7 @@ public class ServerSIWY implements Runnable {
 	private boolean isRunning;
 
 	ServerSIWY(int num, int max) throws IOException {
-		this.socketserver = new ServerSocket(num,5);
+		this.socketserver = new ServerSocket(num, 5);
 		this.nbrClient = 0;
 		this.socket = new Socket[5];
 		this.clientMax = max;
@@ -39,20 +39,18 @@ public class ServerSIWY implements Runnable {
 	public int getNbrClient() {
 		return this.nbrClient;
 	}
-	
-	public boolean getState () {
+
+	public boolean getState() {
 		return this.isRunning;
 	}
-	
+
 	public void closeServer() {
-		this.isRunning = false;
 		for (int i = 0; i < this.nbrClient; i++) {
 			this.printer[i].close();
 		}
-		
+		this.isRunning = false;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void run() {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		// On attend de recevoir les clients
@@ -80,7 +78,7 @@ public class ServerSIWY implements Runnable {
 				testOpen = testOpen & fenetre[i].isShowing();
 			}
 		}
-		
+		System.out.println("Over");
 		for (int i = 0; i < this.nbrClient; i++) {
 			fenetre[i].setVisible(false);
 			this.printer[i].close();

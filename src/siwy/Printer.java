@@ -24,16 +24,23 @@ public class Printer implements Runnable {
 		this.fenetre = jframe;
 		this.isRunning = true;
 	}
-	
+
 	public void close() {
 		this.isRunning = false;
 	}
-
+	
+	public void wait( int a ) {
+		try {
+			Thread.sleep(a);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 	public void run() {
-		int length;
+		int length = 0;
 		JPanel jpanel;
 		System.out.println(socket.isClosed());
-		while ( isRunning ) {
+		while (this.isRunning && !this.socket.isClosed()) {
 			try {
 				length = din.readInt();
 				if (length == 0) {
@@ -49,10 +56,12 @@ public class Printer implements Runnable {
 				this.fenetre.add(jpanel);
 				this.fenetre.setContentPane(jpanel);
 				this.fenetre.revalidate();
+				this.wait(10);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-	}
 
+		}
+		this.fenetre.dispose();
+	}
 }
