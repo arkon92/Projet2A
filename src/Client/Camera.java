@@ -1,4 +1,4 @@
-package siwy;
+package Client;
 
 import org.opencv.core.Mat;
 import org.opencv.highgui.VideoCapture;
@@ -13,6 +13,10 @@ public class Camera implements Runnable {
 		this.cache = c;
 		this.ouvert = true;
 		new Thread(this).start();
+	}
+	
+	public void close() {
+		this.ouvert = false;
 	}
 
 	public void run() {

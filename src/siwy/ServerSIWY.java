@@ -19,7 +19,7 @@ public class ServerSIWY implements Runnable {
 	private Thread[] thread;
 	private boolean isRunning;
 
-	ServerSIWY(int num, int max) throws IOException {
+	public ServerSIWY(int num, int max) throws IOException {
 		this.socketserver = new ServerSocket(num, 5);
 		this.nbrClient = 0;
 		this.socket = new Socket[5];

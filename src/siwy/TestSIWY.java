@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.opencv.core.Core;
 
+import Client.ClientSIWY;
+
 public class TestSIWY {
 
 	public static void main(String[] args) throws IOException,
@@ -51,9 +53,14 @@ public class TestSIWY {
 		t3.start();
 		
 		*/
-		CacheMatImage m = new CacheMatImage();
-		Camera c = new Camera(0,m);
-		TMathBytes t = new TMathBytes(m);
+		
+		String addServ = "127.0.0.1";
+		ServerSIWY serv = new ServerSIWY(6500, 1);
+		Thread s = new Thread(serv);
+		s.start();
+		
+		ClientSIWY c = new ClientSIWY(addServ, 6500);
+		
 	}
 
 }

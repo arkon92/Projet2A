@@ -1,14 +1,15 @@
-package siwy;
+package Client;
 
-import org.opencv.core.Mat;
 
-public class CacheMatImage {
-
-	public CacheMatImage() {
+public class CacheTabBytes {
+	private byte[] tabBytes;
+	private boolean cache;
+	
+	public CacheTabBytes() {
 		this.cache = false;
 	}
 
-	synchronized void setMat(Mat mat) {
+	synchronized public void setTab( byte[] t) {
 		if (this.cache) {
 			try {
 				wait();
@@ -16,13 +17,13 @@ public class CacheMatImage {
 				e.printStackTrace();
 			}
 		}
-		this.matImage = mat;
+		this.tabBytes = t;
 		System.out.println("Done!");
 		this.cache = true;
 		notify();
 	}
-
-	synchronized Mat getMat() {
+	
+	synchronized byte[] getTab() {
 		System.out.println("Incomming");
 		if ( !this.cache ) {
 			try {
@@ -33,11 +34,8 @@ public class CacheMatImage {
 		}
 		this.cache = false;
 		notify();
-		System.out.println("Done2!");
-		return this.matImage;
+		return this.tabBytes;
 	}
-
-	private Mat matImage;
-	private boolean cache;
-
+	
+	
 }
