@@ -40,7 +40,7 @@ public class Printer implements Runnable {
 		int length = 0;
 		JPanel jpanel;
 		System.out.println(socket.isClosed());
-		while (this.isRunning && !this.socket.isClosed()) {
+		while (this.isRunning && !this.socket.isClosed() && length!=9999 ) {
 			try {
 				length = din.readInt();
 				if (length == 0) {

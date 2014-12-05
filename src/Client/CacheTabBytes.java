@@ -18,13 +18,10 @@ public class CacheTabBytes {
 			}
 		}
 		this.tabBytes = t;
-		System.out.println("Done!");
 		this.cache = true;
 		notify();
 	}
-	
 	synchronized byte[] getTab() {
-		System.out.println("Incomming");
 		if ( !this.cache ) {
 			try {
 				wait();

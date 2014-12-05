@@ -57,6 +57,7 @@ public class ServerSIWY implements Runnable {
 		while (this.nbrClient < this.clientMax) {
 			try {
 				this.socket[this.nbrClient] = socketserver.accept();
+				System.out.println("Client connecté");
 				System.out.println(socket[this.nbrClient]);
 				System.out.println(this.socketserver);
 				printer[this.nbrClient] = new Printer(socket[this.nbrClient],
